@@ -20,6 +20,15 @@ app.get('/tasks', async (req, res) => {
     }
 });
 
+app.get('/tasks/:id', async (req, res) => {
+    try {
+        const task = await TaskModel.findById(req.params.id);
+        res.status(200).send(task);
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+});
+
 app.post('/tasks', async (req, res) => {
     try {
         const task = new TaskModel(req.body);
