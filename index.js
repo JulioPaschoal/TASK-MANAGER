@@ -30,6 +30,15 @@ app.post('/tasks', async (req, res) => {
     }
 });
 
+app.delete('/tasks/:id', async (req, res) => {
+    try {
+        const task = await TaskModel.findByIdAndDelete(req.params.id);
+        res.status(204).send(task);
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+});
+
 app.listen(PORT, () => {
     console.log(`http://localhost:${PORT}`);
 });
