@@ -50,17 +50,27 @@ app.delete('/tasks/:id', async (req, res) => {
 
 app.put('/tasks/:id', async (req, res) => {
     try {
-        const task = await TaskModel.findByIdAndUpdate(
-            req.params.id,
-            req.body,
-            {
-                new: true,
+        const taskId = req.params.id;
+        const taskData = req.body;
+
+        const taskToUpdate = await TaskModel.findById(taskId);
+
+        const allowedUpdate = ['isCompleted'];
+        const requestedUpdates = Object.keys(req.body);
+
+        for (update of requestedUpdates) {
+            if (allowedUpdate.includes(update)) {
+                taskToUpdate[update] = taskData[update];
+            } else {
+                return res
+                    .status(500)
+                    .send('Um ou mais campos inseridos não são editáveis');
             }
-        );
-        res.status(200).send(task);
-    } catch (error) {
-        res.status(500).send(error.message);
-    }
+        }
+
+        await taskToUpdate.save();
+        return res.status(200).send(taskToUpdate);
+    } catch (error) {}
 });
 
 app.listen(PORT, () => {
