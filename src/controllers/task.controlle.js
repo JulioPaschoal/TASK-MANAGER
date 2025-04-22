@@ -6,7 +6,7 @@ class TaskController {
         this.res = res;
     }
 
-    async getTasks() {
+    async getAll() {
         try {
             const tasks = await TaskModel.find({});
             this.res.status(200).send(tasks);
@@ -14,7 +14,7 @@ class TaskController {
             this.res.status(500).send(error.message);
         }
     }
-    async getTaskById() {
+    async getById() {
         try {
             const task = await TaskModel.findById(this.req.params.id);
             if (!task) {
@@ -23,6 +23,16 @@ class TaskController {
                     .send('Essa tarefa não foi encontrada');
             }
             this.res.status(200).send(task);
+        } catch (error) {
+            this.res.status(500).send(error.message);
+        }
+    }
+
+    async create() {
+        try {
+            const task = new TaskModel(this.req.body);
+            await task.save();
+            this.res.status(201).send(task);
         } catch (error) {
             this.res.status(500).send(error.message);
         }
