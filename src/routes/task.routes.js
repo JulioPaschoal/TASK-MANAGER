@@ -1,15 +1,11 @@
 const express = require('express');
 const TaskModel = require('../model/Task.model');
+const TaskController = require('../controllers/task.controlle');
 
 const router = express.Router();
 
 router.get('/', async (req, res) => {
-    try {
-        const tasks = await TaskModel.find({});
-        res.status(200).send(tasks);
-    } catch (error) {
-        res.status(500).send(error.message);
-    }
+    return new TaskController(req, res).getTasks();
 });
 
 router.get('/:id', async (req, res) => {
