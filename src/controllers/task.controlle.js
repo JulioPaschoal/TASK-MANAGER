@@ -60,6 +60,15 @@ class TaskController {
             return this.res.status(500).send(error.message);
         }
     }
+
+    async delete() {
+        try {
+            const task = await TaskModel.findByIdAndDelete(this.req.params.id);
+            this.res.status(204).send(task);
+        } catch (error) {
+            this.res.status(500).send(error.message);
+        }
+    }
 }
 
 module.exports = TaskController;
