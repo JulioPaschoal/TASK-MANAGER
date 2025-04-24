@@ -13,28 +13,11 @@ router.get('/:id', async (req, res) => {
 });
 
 router.post('/', async (req, res) => {
-    return new TaskController(req, res).create();
+    return new TaskController(req, res).Create();
 });
 
 router.put('/:id', async (req, res) => {
-    try {
-        const taskId = req.params.id;
-        const taskData = req.body;
-        const taskToUpdate = await TaskModel.findById(taskId);
-        const allowedUpdate = ['isCompleted'];
-        const requestedUpdates = Object.keys(req.body);
-        for (update of requestedUpdates) {
-            if (allowedUpdate.includes(update)) {
-                taskToUpdate[update] = taskData[update];
-            } else {
-                return res
-                    .status(500)
-                    .send('Um ou mais campos inseridos não são editáveis');
-            }
-        }
-        await taskToUpdate.save();
-        return res.status(200).send(taskToUpdate);
-    } catch (error) {}
+    return new TaskController(req, res).update();
 });
 
 router.delete('/:id', async (req, res) => {
